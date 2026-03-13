@@ -12,10 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <ivshm/interface/channel.h>
+#include <ivshm/utils/common.h>
+#include <ivshm/utils/config.h>
 #include <ivshm/utils/logger.h>
 #include <ivshm_version.h>
 
 #include <memory>
+
+#include "ivshm/utils/utils.h"
 
 namespace {
 
@@ -34,6 +39,23 @@ auto RealMain([[maybe_unused]] const int argc,
   InitLog();
 
   IVSHM_LOG_TAG(INFO, k_log_tag, "Summary:{}", ivshm::Version::Summary());
+
+  constexpr auto channel = ivshm::Channel{42};
+  IVSHM_LOG_TAG(INFO, k_log_tag, "Channel: {}", channel);
+  IVSHM_LOG_TAG(INFO, k_log_tag, "channel str : {}", channel.ToString());
+
+  auto config = ivshm::Config{};
+  config.services.size = 32;
+  config.services.channels.emplace_back(channel);
+  IVSHM_LOG_TAG(DEBUG, k_log_tag, "config:\n{:y}", config);
+
+  auto config_str = ivshm::ReadFileContent(std::format("{}/{}", k_config_dir, k_config_filename));
+
+  IVSHM_LOG_TAG(DEBUG, k_log_tag, "config_str:\n{}", config_str.value());
+
+  struct_yaml::from_yaml(config, config_str.value());
+
+  IVSHM_LOG_TAG(DEBUG, k_log_tag, "config: \n{:y}", config);
 
   return EXIT_SUCCESS;
 }

@@ -14,6 +14,26 @@
 
 #pragma once
 
+#include <ivshm/interface/channel.h>
+#include <ivshm/utils/common.h>
+
+#include <vector>
+
 namespace ivshm {
 
-}
+// services:
+//   size: 32  # Size in MB, supports values between 1 and 512.
+//   channels: # Supports a minimum of 1 channel and a maximum of 16 channels.
+//     - 0
+
+struct Services {
+  std::size_t size;
+  std::vector<Channel> channels;
+};
+YLT_REFL(Services, size, channels)
+
+struct Config {
+  Services services;
+};
+YLT_REFL(Config, services)
+}  // namespace ivshm

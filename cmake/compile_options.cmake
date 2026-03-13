@@ -26,6 +26,10 @@ endif ()
 set(CMAKE_C_FLAGS "${CMAKE_EXTRA_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_EXTRA_CXX_FLAGS}")
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options(-Wno-deprecated-literal-operator)
+endif()
+
 if (ENABLE_COVERAGE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_COMMON_FLAGS} --coverage -fprofile-arcs -ftest-coverage")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_COMMON_FLAGS} -coverage -fprofile-arcs -ftest-coverage")

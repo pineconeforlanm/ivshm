@@ -15,8 +15,11 @@
 #pragma once
 
 #include <ylt/struct_json/json_writer.h>
+#include <ylt/struct_json/json_reader.h>
 #include <ylt/struct_xml/xml_writer.h>
+#include <ylt/struct_xml/xml_reader.h>
 #include <ylt/struct_yaml/yaml_writer.h>
+#include <ylt/struct_yaml/yaml_reader.h>
 
 #include <string>
 #include <vector>

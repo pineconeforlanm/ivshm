@@ -1,0 +1,4 @@
+services:
+  size: 32  # Size in MB, supports values between 1 and 512.
+  channels: # Supports a minimum of 1 channel and a maximum of 16 channels.
+    - 0

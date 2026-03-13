@@ -1,0 +1,19 @@
+PROJECT_NAME           = @PROJECT_NAME@
+PROJECT_NUMBER         = @PROJECT_VERSION@
+INPUT                  = @DOXYGEN_INPUT@
+OUTPUT_DIRECTORY       = docs
+RECURSIVE              = YES
+
+EXTENSION_MAPPING      = cc=C++ cpp=C++
+FILE_PATTERNS          = *.h *.hpp *.cc *.cpp
+
+HAVE_DOT               = @DOXYGEN_HAVE_DOT@
+DOT_PATH               = @DOT_EXECUTABLE@
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+GRAPHICAL_HIERARCHY    = YES
+
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES

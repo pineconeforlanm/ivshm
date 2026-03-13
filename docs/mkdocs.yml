@@ -1,0 +1,44 @@
+# docs/mkdocs.yml
+# 核心修复：适配 MkDocs 2.0 规范 + 你的目录结构
+site_name: ivshm 项目文档
+site_description: ivshm C++ 项目文档（MkDocs + Doxygen + CMake）
+site_author: Your Name
+site_version: 0.1.0.0
+
+# ===================== 修复核心问题 =====================
+# 1. docs_dir 必须是子目录（创建 docs/src 存放 markdown 文档）
+docs_dir: src
+# 2. 最终文档输出目录（和 CMake 对齐）
+site_dir: ../build/cfg-debug/docs/mkdocs
+
+# ===================== 主题配置（兼容 MkDocs 2.0） =====================
+theme: readthedocs
+
+# ===================== 导航配置（关键：适配新的 docs/src 目录） =====================
+nav:
+  - 首页: index.md
+  - API 文档:
+      # 链接到 Doxygen 生成的文档（放到 static 目录，MkDocs 会自动复制）
+      - 自动生成(Doxygen): ../doxygen/html/index.html
+  - 开发指南: dev_guide.md
+
+# ===================== 扩展配置（修复 extra_static 问题） =====================
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - codehilite:
+      guess_lang: false
+      lang_map:
+        c++: cpp
+  - toc:
+      permalink: true
+
+# 替代废弃的 extra_static：静态文件放到 docs/static 目录，MkDocs 自动复制
+extra_files:
+  - doxygen/html  # 包含 Doxygen 生成的文档（和 CMake 复制的路径对齐）
+
+# ===================== 兼容 MkDocs 2.0 的其他配置 =====================
+# 关闭严格模式（避免 MkDocs 2.0 额外警告）
+strict: false
+# 启用目录页面生成
+nav_previous_next: true

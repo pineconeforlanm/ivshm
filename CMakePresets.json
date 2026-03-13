@@ -1,0 +1,97 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 30,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "cfg-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "${sourceDir}/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_BUILD_TYPE": "Release",
+        "USE_CONAN_DEPS": "OFF",
+        "BUILD_EXAMPLES": "OFF",
+        "BUILD_TESTS": "ON",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "YLT_ENABLE_DL": "ON",
+        "YLT_ENABLE_SSL": "ON",
+        "YLT_ENABLE_PMR": "OFF",
+        "YLT_ENABLE_NTLS": "ON",
+        "YLT_ENABLE_IO_URING": "ON",
+        "YLT_ENABLE_STRUCT_PACK_UNPORTABLE_TYPE": "ON",
+        "YLT_ENABLE_STRUCT_PACK_OPTIMIZE": "ON",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install/${presetName}",
+        "GENERATED_OUT_DIR": "${sourceDir}/build/${presetName}/shared",
+        "PROTO_GEN_PATH": "${sourceDir}/build/${presetName}/shared/proto",
+        "VERSION_GEN_PATH": "${sourceDir}/build/${presetName}/shared/version",
+        "CMAKE_C_FLAGS": "-fPIC -Wall -Werror -Wno-error=unused-but-set-variable -Wno-unused-local-typedefs -Wno-strict-aliasing -Wno-maybe-uninitialized -Wno-sign-compare",
+        "CMAKE_CXX_FLAGS": "-fPIC -Wall -Wno-reorder -Werror -Wno-error=unused-but-set-variable -Wno-unused-local-typedefs -Wno-strict-aliasing -Wno-maybe-uninitialized -Wno-sign-compare -Wno-pessimizing-move -Wno-deprecated-literal-operator"
+      }
+    },
+    {
+      "name": "cfg-base-conan",
+      "hidden": true,
+      "inherits": "cfg-base",
+      "cacheVariables": {
+        "USE_CONAN_DEPS": "ON",
+        "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "conan_provider.cmake"
+      }
+    },
+    { "name": "cfg-default", "inherits": "cfg-base", "displayName": "x64 release" },
+    { "name": "cfg-debug", "inherits": "cfg-base", "displayName": "x64 debug", "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "BUILD_EXAMPLES": "ON" } },
+    { "name": "cfg-coverage-default", "inherits": "cfg-base", "displayName": "x64 coverage release", "cacheVariables": { "ENABLE_COVERAGE": "ON" } },
+    { "name": "cfg-coverage-debug", "inherits": "cfg-base", "displayName": "x64 coverage", "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "ENABLE_COVERAGE": "ON" } },
+    { "name": "cfg-conan-default", "inherits": "cfg-base-conan", "displayName": "x64 conan release" },
+    { "name": "cfg-conan-debug", "inherits": "cfg-base-conan", "displayName": "x64 conan Debug", "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "BUILD_EXAMPLES": "ON" } },
+    { "name": "cfg-conan-coverage-default", "inherits": "cfg-base-conan", "displayName": "x64 conan coverage release", "cacheVariables": { "ENABLE_COVERAGE": "ON" } },
+    { "name": "cfg-conan-coverage-debug", "inherits": "cfg-base-conan", "displayName": "x64 conan Coverage", "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "ENABLE_COVERAGE": "ON" } }
+  ],
+  "buildPresets": [
+    { "name": "build-default", "configurePreset": "cfg-default", "configuration": "Release" },
+    { "name": "build-debug", "configurePreset": "cfg-debug", "configuration": "Debug" },
+    { "name": "build-coverage-default", "configurePreset": "cfg-coverage-default", "configuration": "Release" },
+    { "name": "build-coverage-debug", "configurePreset": "cfg-coverage-debug", "configuration": "Debug" },
+    { "name": "build-conan-default", "configurePreset": "cfg-conan-default", "configuration": "Release" },
+    { "name": "build-conan-debug", "configurePreset": "cfg-conan-debug", "configuration": "Debug" },
+    { "name": "build-conan-coverage-default", "configurePreset": "cfg-conan-coverage-default", "configuration": "Release" },
+    { "name": "build-conan-coverage-debug", "configurePreset": "cfg-conan-coverage-debug", "configuration": "Debug" }
+  ],
+  "testPresets": [
+    { "name": "test-base", "hidden": true, "output": { "outputOnFailure": true }, "execution": { "noTestsAction": "error", "stopOnFailure": true } },
+    { "name": "test-default", "inherits": "test-base", "configurePreset": "cfg-default", "filter": { "include": { "name": "run_all_unittest" } } },
+    { "name": "test-debug", "inherits": "test-base", "configurePreset": "cfg-debug" },
+    { "name": "test-coverage-default", "inherits": "test-base", "configurePreset": "cfg-coverage-default" },
+    { "name": "test-coverage-debug", "inherits": "test-base", "configurePreset": "cfg-coverage-debug" },
+    { "name": "test-conan-default", "inherits": "test-base", "configurePreset": "cfg-conan-default" },
+    { "name": "test-conan-debug", "inherits": "test-base", "configurePreset": "cfg-conan-debug" },
+    { "name": "test-conan-coverage-default", "inherits": "test-base", "configurePreset": "cfg-conan-coverage-default" },
+    { "name": "test-conan-coverage-debug", "inherits": "test-base", "configurePreset": "cfg-conan-coverage-debug" }
+  ],
+  "packagePresets": [
+    { "name": "pkg-base", "hidden": true, "generators": ["TGZ", "DEB", "ZIP"], "configurations": ["Release"] },
+    { "name": "pkg-default", "inherits": "pkg-base", "configurePreset": "cfg-default" },
+    { "name": "pkg-debug", "inherits": "pkg-base", "configurePreset": "cfg-debug", "configurations": ["Debug"] },
+    { "name": "pkg-coverage-default", "inherits": "pkg-base", "configurePreset": "cfg-coverage-default" },
+    { "name": "pkg-coverage-debug", "inherits": "pkg-base", "configurePreset": "cfg-coverage-debug", "configurations": ["Debug"] },
+    { "name": "pkg-conan-default", "inherits": "pkg-base", "configurePreset": "cfg-conan-default" },
+    { "name": "pkg-conan-debug", "inherits": "pkg-base", "configurePreset": "cfg-conan-debug", "configurations": ["Debug"] },
+    { "name": "pkg-conan-coverage-default", "inherits": "pkg-base", "configurePreset": "cfg-conan-coverage-default" },
+    { "name": "pkg-conan-coverage-debug", "inherits": "pkg-base", "configurePreset": "cfg-conan-coverage-debug", "configurations": ["Debug"] }
+  ],
+  "workflowPresets": [
+    { "name": "wf-default", "steps": [ { "type": "configure", "name": "cfg-default" }, { "type": "build", "name": "build-default" }, { "type": "test", "name": "test-default" }, { "type": "package", "name": "pkg-default" } ] },
+    { "name": "wf-debug", "steps": [ { "type": "configure", "name": "cfg-debug" }, { "type": "build", "name": "build-debug" }, { "type": "test", "name": "test-debug" }, { "type": "package", "name": "pkg-debug" } ] },
+    { "name": "wf-conan-default", "steps": [ { "type": "configure", "name": "cfg-conan-default" }, { "type": "build", "name": "build-conan-default" }, { "type": "test", "name": "test-conan-default" }, { "type": "package", "name": "pkg-conan-default" } ] },
+    { "name": "wf-conan-debug", "steps": [ { "type": "configure", "name": "cfg-conan-debug" }, { "type": "build", "name": "build-conan-debug" }, { "type": "test", "name": "test-conan-debug" }, { "type": "package", "name": "pkg-conan-debug" } ] },
+    { "name": "wf-coverage-default", "steps": [ { "type": "configure", "name": "cfg-coverage-default" }, { "type": "build", "name": "build-coverage-default" }, { "type": "test", "name": "test-coverage-default" }, { "type": "package", "name": "pkg-coverage-default" } ] },
+    { "name": "wf-coverage-debug", "steps": [ { "type": "configure", "name": "cfg-coverage-debug" }, { "type": "build", "name": "build-coverage-debug" }, { "type": "test", "name": "test-coverage-debug" }, { "type": "package", "name": "pkg-coverage-debug" } ] }
+  ]
+}
